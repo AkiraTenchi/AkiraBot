@@ -1,16 +1,11 @@
 use serenity::{
-    async_trait,
-    client::{Client, Context, EventHandler},
+    client::Context,
     framework::standard::{
         macros::{command, group},
-        CommandResult, StandardFramework,
+        CommandResult,
     },
-    model::{channel::Message, gateway::Ready},
+    model::channel::Message,
 };
-
-#[group]
-#[commands(ping)]
-struct General;
 
 #[command]
 async fn ping(ctx: &Context, msg: &Message) -> CommandResult {

@@ -1,15 +1,24 @@
-mod general;
-use general::GENERAL_GROUP;
+mod commands;
+use commands::general::*;
+use commands::management::*;
 use serenity::{
     async_trait,
     client::{Client, Context, EventHandler},
     framework::standard::{
-        macros::{command, group},
-        CommandResult, StandardFramework,
+        macros::{command, group, help},
+        StandardFramework,
     },
     model::{channel::Message, gateway::Ready},
 };
 use std::fs;
+
+#[group]
+#[commands(ping)]
+struct General;
+
+#[group]
+#[commands(delete_msg)]
+struct Management;
 
 struct Handler;
 
@@ -24,6 +33,7 @@ impl EventHandler for Handler {
 async fn main() {
     let framework = StandardFramework::new()
         .configure(|c| c.prefix("*")) // set prefix to '*'
+        .group(&MANAGEMENT_GROUP)
         .group(&GENERAL_GROUP);
 
     // login via token from file
