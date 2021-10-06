@@ -4,11 +4,8 @@ use commands::management::*;
 use serenity::{
     async_trait,
     client::{Client, Context, EventHandler},
-    framework::standard::{
-        macros::{command, group, help},
-        StandardFramework,
-    },
-    model::{channel::Message, gateway::Ready},
+    framework::standard::{macros::group, StandardFramework},
+    model::gateway::Ready,
 };
 use std::fs;
 
@@ -17,7 +14,7 @@ use std::fs;
 struct General;
 
 #[group]
-#[commands(delete_msg)]
+#[commands(delete_msg, nick)]
 struct Management;
 
 struct Handler;
