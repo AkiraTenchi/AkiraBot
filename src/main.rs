@@ -1,4 +1,5 @@
 mod commands;
+
 use commands::general::*;
 use commands::management::*;
 use serenity::{
@@ -14,13 +15,20 @@ use std::fs;
 struct General;
 
 #[group]
-#[commands(delete_msg, nick)]
+#[commands(delete_msg, nick, kick)]
 struct Management;
 
 struct Handler;
 
 #[async_trait]
 impl EventHandler for Handler {
+    // async fn guild_member_addition(&self, ctx: Context, guild_id: GuildId, mut new_member: Member) {
+    //     println!("new member");
+    //     let roles = guild_id.roles(&ctx.http).await.expect("failed to get guild roles");
+    //     let lowest_role = roles.into_iter().last().expect("lowest role");
+    //     new_member.add_role(&ctx.http, lowest_role.0).await.expect("member role addition");
+    // }
+
     async fn ready(&self, _: Context, ready: Ready) {
         println!("{} is connected!", ready.user.name);
     }
