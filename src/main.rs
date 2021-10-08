@@ -15,7 +15,7 @@ use std::fs;
 struct General;
 
 #[group]
-#[commands(delete_msg, nick, kick)]
+#[commands(delete_msg, nick, kick, ban)]
 struct Management;
 
 struct Handler;

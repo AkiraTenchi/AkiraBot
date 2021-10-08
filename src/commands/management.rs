@@ -14,7 +14,9 @@ async fn delete_msg(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
     }
 
     if num > 100 {
-        channel_id.say(ctx, "Maximum number of deletable messages is 99").await?;
+        channel_id
+            .say(ctx, "Maximum number of deletable messages is 99")
+            .await?;
         return Ok(());
     }
 
@@ -81,22 +83,22 @@ async fn nick(ctx: &Context, msg: &Message, args: Args) -> CommandResult {
 async fn kick(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
     let mem_perms = get_member_permissions_from_msg(&ctx, &msg).await;
 
-    let target_id = args
-        .single::<UserId>()
-        .expect("Failed to get target from msg");
-
-    let target = get_member_from_user_id(&ctx, &msg, target_id).await;
-
     if mem_perms.contains(Permissions::KICK_MEMBERS)
         || mem_perms.contains(Permissions::ADMINISTRATOR)
     {
+        let target_id = args
+            .single::<UserId>()
+            .expect("Failed to get target from msg");
+
+        let target = get_member_from_user_id(&ctx, &msg, target_id).await;
+
         target.kick(ctx).await.expect("failed to kick member");
         msg.channel_id
             .say(
                 &ctx.http,
                 format!(
                     "{} has been kicked by {}",
-                    target.display_name(),
+                    target.user.name,
                     msg.author.name
                 ),
             )
@@ -110,6 +112,38 @@ async fn kick(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
             .await?;
     }
 
+    Ok(())
+}
+
+#[command]
+async fn ban(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
+    let mem_perms = get_member_permissions_from_msg(&ctx, &msg).await;
+
+    if mem_perms.contains(Permissions::BAN_MEMBERS)
+        || mem_perms.contains(Permissions::ADMINISTRATOR)
+    {
+        let target_id = args
+            .single::<UserId>()
+            .expect("Failed to get target from msg");
+
+        let target = get_member_from_user_id(&ctx, &msg, target_id).await;
+
+        target
+            .ban(&ctx.http, 7)
+            .await
+            .expect("failed to ban member");
+
+        msg.channel_id
+            .say(
+                &ctx.http,
+                format!("{} has banned {}", msg.author.name, target.user.name),
+            )
+            .await?;
+    } else {
+        msg.channel_id
+            .say(&ctx.http, "You do not have Permission to use this Command")
+            .await?;
+    }
     Ok(())
 }
 
