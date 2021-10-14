@@ -98,8 +98,7 @@ async fn kick(ctx: &Context, msg: &Message, mut args: Args) -> CommandResult {
                 &ctx.http,
                 format!(
                     "{} has been kicked by {}",
-                    target.user.name,
-                    msg.author.name
+                    target.user.name, msg.author.name
                 ),
             )
             .await?;
